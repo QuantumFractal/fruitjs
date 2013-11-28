@@ -1,0 +1,70 @@
+html {
+	/* Font decisions */
+	font-family: 'Gudea', sans-serif;
+	color: #222;
+		
+	padding: 10px;
+}
+
+/* Link style */
+a { text-decoration: underline; color: #002600; }
+a:hover { text-decoration: none; }
+
+#frame {
+	/* Vertical and horizontal centering */
+	margin: auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0;
+	
+	/* Dimensions */
+	width: 500px;
+	height: 500px;
+}
+
+#image {
+	width: 500px;
+	height: 400px;
+}
+
+#description {
+	margin: 0;
+	padding: 0;
+}
+
+/* For the section containing commands */
+#commands {
+	margin: 0;
+	padding: 0;
+}
+
+/* For an individual command */
+.command:hover {
+	text-decoration: underline;
+}
+
+.back {
+	color: #ccc;
+}
+
+ul {
+	list-style: none;
+
+	margin-top: .5em;
+	margin-bottom: -.5em;
+	margin-left: 0;
+
+	padding-left: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+li {
+	padding-left: 1em;
+	text-indent: -1em;
+}
+
+li:before {
+	content: ">";
+	padding-right: 5px;
+}
+

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" href="default.ico" />
+	<meta charset="UTF-8">
+	<title>FRUIT</title>
+	
+	<link href='http://fonts.googleapis.com/css?family=Gudea:700' rel='stylesheet' type='text/css'>
+
+	<link href='default.css' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+<div id="frame">
+
+	<div id="image">
+	</div>
+	
+	<div id="description">
+		Dude. If you're reading this, something's not working. 
+	</div>
+	
+	<div id="commands">
+	</div>
+
+	<script src="trees.js"></script>
+
+	<script>
+	
+	var tree = "aT0";
+	
+	var path;
+	var imgPath;
+	
+	init();
+	
+	// Functions
+	
+	function init() {
+		// Set path values
+		path = ".";
+		imgPath = "0";
+		
+		// Intro
+		if (tree == "aT0") {
+			imgPath = "";
+		}
+	
+		// Set up events
+		if (eval(tree).events != null) {
+			var num = 0;
+			while (eval("eval(tree).events[" + num + "]") != null) {
+				num++;
+			}
+		
+			num--;
+					
+			for (var i = 0; i <= num; i++) {
+				eval(eval(eval(tree).events[i] + " = false"));
+			}
+		}
+	
+		// Set initial image
+		document.getElementById("image").style.background = "url('images/" + tree + "/0.png')";
+	
+		// Set initial description
+		document.getElementById("description").textContent = eval("eval(tree)" + path + "desc");
+	
+		// Set initial commands
+		document.getElementById("commands").innerHTML = listCommands();
+	}
+	
+	function listCommands() {
+		var num = 0;
+		while (eval("eval(tree)" + path + "p" + num) != null) {
+			num++;
+		}
+		
+		num--;
+		
+		var commands = "<ul>";
+		for (var i = 0; i <= num; i++) {
+			if (commandCanShow(i)) {
+				commands += "<li>";
+				commands += "<span class=\"command\" onclick=\"";
+				
+				// First check if we're switching trees. 
+				if (eval("eval(tree)" + path + "p" + i + ".tree") != null) {
+					commands += "updateTree('";
+					commands += eval("eval(tree)" + path + "p" + i + ".tree");
+				} else {
+					commands += "updatePath('";
+					if (eval("eval(tree)" + path + "p" + i + ".reset") == null) {
+						commands += i;
+					} else { // Is this command reverting the path to an earlier path? 
+						commands += "-1', '" + eval("eval(tree)" + path + "p" + i + ".reset");
+					}
+				}
+				commands += "')\">";
+				
+				// Is there a name for this command? 
+				if (eval("eval(tree)" + path + "c" + i) != "" && eval("eval(tree)" + path + "c" + i) != undefined) {
+					commands += eval("eval(tree)" + path + "c" + i);
+				} else {
+					commands += "Continue.";
+				}
+				
+				commands += "</span>";
+				commands += "</li>";
+			}
+		}
+		
+		commands += "</ul>";
+		
+		// Should there be an undo button? Only if we're not at the root of the current tree. 
+		/*(if (imgPath != "") {
+			commands += "<br>"
+			commands += "<span class=\"back command\" onclick=\"updatePath('-1', false)\">< Undo</span>";
+		}*/
+		
+		return commands;
+	}
+	
+	function updatePath(choice, reset) {
+		if (choice == -1 && reset == "") {
+			path = path.substring(0, path.length - 3);
+			imgPath = imgPath.substring(0, imgPath.length - 1);
+		} else if (choice == -1) {
+			// Set path and imgPath to reset
+			imgPath = reset;
+			bobby = 10;
+			path = ".";
+			for (var i = 0; i < reset.length; i++) {
+				path += "p" + reset[i] + ".";
+			}
+		} else {
+			path += "p" + choice + ".";
+			imgPath += choice;
+		}
+		
+		// Set image
+		if (imgPath != "") {
+			document.getElementById("image").style.background = "url('images/" + tree + "/" + imgPath + ".png')";
+		} else {
+			document.getElementById("image").style.background = "url('images/" + tree + "/0.png')";
+		}
+
+		// Set description
+		if (eval("eval(tree)" + path + "desc") != undefined) {
+			document.getElementById("description").textContent = eval("eval(tree)" + path + "desc");
+		} else {
+			document.getElementById("description").textContent = "";
+		}
+
+		// Set commands
+		document.getElementById("commands").innerHTML = listCommands();
+		
+		// Set events triggered
+		if (eval("eval(tree)" + path + "set") != null) {
+			var num = 0;
+			while (eval("eval(tree)" + path + "set[" + num + "]") != null) {
+				num++;
+			}
+			num--;
+		
+			for (var i = 0; i <= num; i++ ) {
+				eval(eval("eval(tree)" + path + "set[" + i + "]")); 
+			}
+		}
+	}
+	
+	function commandCanShow(choice) {
+		// The choice can only show if no events have happened to disqualify it. 
+		if (eval("eval(tree)" + path + "d" + choice) != null) {
+			var num = 0;
+			while (eval("eval(tree)" + path + "d" + choice + "[" + num + "]") != null) {
+				num++;
+			}
+			num--;
+					
+			for (var i = 0; i <= num; i++) {
+				if(eval(eval("eval(tree)" + path + "d" + choice + "[" + i + "]"))) return false;
+			}
+		}
+		return true;
+	}
+	
+	function updateTree(newTree) {
+		tree = newTree;
+		init();
+	}
+	
+	</script>
+
+</div>
+
+</body>
+
+</html>
